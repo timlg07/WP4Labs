@@ -1,0 +1,163 @@
+/* backend */
+
+#memberlist li.passive {
+	font-style: italic
+}
+#memberlist li.passive a{
+	color: grey;
+}
+
+#memberlist li.boss {
+	font-weight: bold;
+}
+
+#select_pic_output {
+	min-height: 75px
+}
+
+#pic_select0r {
+	clear: both
+}
+
+.select0r_pic {
+	float: left;
+	min-height: 64px;
+	cursor: pointer
+}
+
+input.select0r_pic {
+	margin: 5px;
+}	
+
+.select0r_pic img {
+	padding: 2px;
+	border: 1px solid white;
+}
+
+.select0red_pic img {
+	border: 1px solid black;
+	background: grey
+}
+
+.select0r_pic span.hoverfoo {
+	display:none;
+	position: absolute;
+	z-index: 1337;
+	background: white;
+	border: 1px solid silver;
+	padding-left: 2px;
+	padding-right: 2px;
+	margin-top: 1px
+}
+
+.select0r_pic:hover img {
+	border: 1px solid grey;
+}
+
+.select0r_pic:hover span.hoverfoo {
+	display:block;
+}
+
+.floatkiller {
+	clear:both; width: 100%'
+}
+
+/* frontend */ 
+
+.staff {
+	height: 120px;
+	padding: 0px;
+	margin: 0px
+}
+
+.staff .project_member {
+	display: inline;
+	padding-right: 8px;
+	float: left;
+	width: 76px;
+	margin: 0px;
+	text-align: center;
+
+}
+
+.staff .project_member a {
+	font-size: small;
+	font-weight: bolder;
+	text-decoration: none;
+	line-height: 100%;
+	color: black;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	display: block;
+}
+
+.staff .project_member a:hover {
+	background: silver;
+	color: black
+}
+
+
+.staff .project_member a .username {
+	font-size: small;
+	font-weight: default;
+	padding: 0px;
+	
+}
+
+.staff .project_member a .usergroup {
+	font-size: x-small;
+}
+
+.staff .passive a {
+	color: silver
+}
+
+.staff .boss a {
+	color: #990000
+}
+
+/* longlist */
+
+.staff_longlist .longlist_avatar {
+	float: left;
+	margin-right: 6px;
+	
+}
+
+.staff_longlist .active, .staff_longlist .passive, .staff_longlist .boss {
+	min-height: 100px;
+	
+}
+
+.staff_longlist p, .staff_longlist h2, .staff_longlist h3, .staff_longlist h4, .staff_longlist table {
+	margin-left: 106px;
+}
+	
+
+
+/* user page / long list */
+
+table.user_info, table.user_info td {
+	border: none;
+	width: auto;
+	padding: 0px;
+	padding-right: 2em
+}
+
+#userpage h4 {
+	margin-bottom: 0px;
+}
+
+#userpage_avatar {
+	float: right;
+}
+
+#userpage_head h2 {
+	font-size: x-large;
+	margin-bottom: 0px
+}
+
+#userpage_head h3 {
+	font-size: large
+}
+
