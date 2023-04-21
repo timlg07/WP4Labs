@@ -324,7 +324,18 @@ if (count($users) > 0) {
                         ?>
                     </select>
                     <span class="description"><?php _e("The group you belong to."); ?></span><br/>
-                    <!--<input type="checkbox" name="isactive" id="isactive" value="<?php //echo $biofoo['isactive']; ?>" class="regular-text" />Active-->
+                </td>
+            </tr>
+            <tr>
+                <th><label for="isactive"><?php _e("Active"); ?></label></th>
+                <td>
+                    <?php if (current_user_can('edit_users')): ?>
+                        <select name="isactive" id="isactive">
+                            <?php $s = " selected" ?>
+                            <option value="true"<?= $user->active_group ? $s : '' ?>><?php _e("Active"); ?></option>
+                            <option value="false"<?= $user->active_group ? '' : $s ?>><?php _e("Alumni/Inactive"); ?></option>
+                        </select>
+                    <?php endif; ?>
                 </td>
             </tr>
             <tr>
@@ -339,8 +350,7 @@ if (count($users) > 0) {
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </ul>
-                    <pre><?php //var_dump($user);
-                        ?></pre>
+                    <pre><?php /*var_dump($user);*/ ?></pre>
                     <span class="description"><?php _e("Go to the Projects Page to Add/Remove Users from Project, if you are projects leader."); ?></span>
                 </td>
             </tr>
@@ -369,6 +379,7 @@ if (count($users) > 0) {
 
         if (current_user_can('edit_users')) {
             update_user_meta($user_id, 'biofoo_usergroup', esc_sql($_POST['group']));
+            update_user_meta($user_id, 'biofoo_isActive', $_POST['isactive'] == 'true');
         }
 
 
@@ -689,7 +700,11 @@ if (count($users) > 0) {
         global $agroups; //that seems to be ugly but saves some time
 
         $user->group = trim(rawurldecode($user->biofoo_usergroup));
-        $user->active_group = (in_array($user->group, $agroups));
+        $user->active_group = in_array($user->group, $agroups);
+
+        // Override the isActive value with the checkbox data if set for this user
+        if (isset($user->biofoo_isActive)) $user->active_group = !!$user->biofoo_isActive;
+
         $user->boss_group = ($user->group == $agroups[0]);
         $user->group_css = ($user->active_group) ? ($user->boss_group) ? 'boss' : 'active' : 'passive';
         $user->group_ranking = array_search($user->group, $agroups);
