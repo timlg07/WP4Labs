@@ -315,6 +315,13 @@ if (count($users) > 0) {
                             $agroups = explode("\n", get_option('active_usergroups'));
                             $pgroups = explode("\n", get_option('passive_usergroups'));
                             $groups = array_merge($agroups, $pgroups);
+
+                            // handle the case that no group is set yet
+                            if (!$user->group) {
+                                $label = __('Please select a group');
+                                echo "<option selected disabled>{$label}</option>";
+                            }
+
                             foreach ($groups as $group) {
                                 echo "<option", (trim($group) == $user->group) ? " selected='selected'" : '', " value='" . rawurlencode(trim($group)) . "'>$group</option>\n";
                             }
@@ -694,15 +701,17 @@ if (count($users) > 0) {
 
     $agroups = explode("\n", get_option('active_usergroups'));
     $agroups = array_map('trim', $agroups);
+    $inactive_groups = explode("\n", get_option('passive_usergroups', 'Alumni'));
+    $inactive_groups = array_map('trim', $inactive_groups);
 
     function get_biofoo($user)
     {
-        global $agroups; //that seems to be ugly but saves some time
+        global $agroups, $inactive_groups; //that seems to be ugly but saves some time
 
         $user->group = trim(rawurldecode($user->biofoo_usergroup));
-        $user->active_group = in_array($user->group, $agroups);
+        $user->active_group = !in_array($user->group, $inactive_groups);
 
-        // Override the isActive value with the checkbox data if set for this user
+        // Override the isActive value with the checkbox data if set for this user.
         if (isset($user->biofoo_isActive)) $user->active_group = !!$user->biofoo_isActive;
 
         $user->boss_group = ($user->group == $agroups[0]);
