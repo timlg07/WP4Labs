@@ -302,7 +302,7 @@ if (count($users) > 0) {
 
 
     <h3><?php _e("Group Information", "blank"); ?></h3>
-    <p class="description"><?php _e("Only the Admin can change that."); ?></span>
+    <p class="description"><?php _e("Only the Admin can change that."); ?></p>
     <table class="form-table">
         <tr>
             <th><label for="group"><?php _e("Usergroup"); ?></label></th>
@@ -360,10 +360,10 @@ function save_biofoo_profile($user_id)
     $biofoo = array_map('rawurlencode', $biofoo);
     $biofoo = json_encode($biofoo);
 
-    update_usermeta($user_id, 'bio_foo_fields', $biofoo);
+    update_user_meta($user_id, 'bio_foo_fields', $biofoo);
 
     if (current_user_can('edit_users')) {
-        update_usermeta($user_id, 'biofoo_usergroup', mysql_real_escape_string($_POST['group']));
+        update_user_meta($user_id, 'biofoo_usergroup', esc_sql($_POST['group']));
     }
 
 
@@ -553,11 +553,9 @@ function add_user_to_project()
 
 function fetch_it()
 {
-
-
-    $lug = rawurlencode($_POST['countryslug']);
+    $slug = rawurlencode($_POST['countryslug']);
     require_once(WP_PLUGIN_DIR . '/wp4labs/ariw.org_connection.php');
-    ariw_fetch($lug);
+    ariw_fetch($slug);
     die();
 }
 
@@ -736,7 +734,7 @@ function echo_project_members($post_id, $style = 'boxes', $allgroups = true)
 
         //remove eventually deleted user!
         if (!$user->ID) {
-            delete_post_meta($post->ID, 'member', $member);
+            delete_post_meta($post_id, 'member', $member);
             continue;
         }
 
