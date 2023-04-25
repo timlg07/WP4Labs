@@ -311,8 +311,8 @@ function biofoo_box_inside($post) {
             <tr>
                 <th><label for="group"><?php _e("Usergroup"); ?></label></th>
                 <td>
-                    <select name="group" id="group" size="1">
-                        <?php if (current_user_can('edit_users')) {
+                    <?php if (current_user_can('edit_users')): ?>
+                        <select name="group" id="group" size="1"><?php
                             $agroups = explode("\n", get_option('active_usergroups'));
                             $pgroups = explode("\n", get_option('passive_usergroups'));
                             $groups = array_merge($agroups, $pgroups);
@@ -326,12 +326,10 @@ function biofoo_box_inside($post) {
                             foreach ($groups as $group) {
                                 echo "<option", (trim($group) == $user->group) ? " selected='selected'" : '', " value='" . rawurlencode(trim($group)) . "'>$group</option>\n";
                             }
-                        } else {
-                            echo "<option selected='selected' value='{$user->group}'>{$user->group}</option>\n";
-                        }
-                        ?>
-                    </select>
-                    <span class="description"><?php _e("The group you belong to."); ?></span><br/>
+                        ?></select>
+                    <?php else: ?>
+                        <strong><?=$user->group?:__("No group")?></strong>
+                    <?php endif; ?>
                 </td>
             </tr>
             <tr>
@@ -343,6 +341,8 @@ function biofoo_box_inside($post) {
                             <option value="true"<?= $user->active_group ? $s : '' ?>><?php _e("Active"); ?></option>
                             <option value="false"<?= $user->active_group ? '' : $s ?>><?php _e("Alumni/Inactive"); ?></option>
                         </select>
+                    <?php else: ?>
+                        <strong><?= $user->active_group ? __('Yes') : __('Alumni/Inactive') ?></strong>
                     <?php endif; ?>
                 </td>
             </tr>
