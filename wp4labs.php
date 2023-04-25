@@ -48,7 +48,7 @@ function add_biofoocss()
     $url = WP_PLUGIN_URL . $relative;
     $path = WP_PLUGIN_DIR . $relative;
     if (file_exists($path)) {
-        wp_register_style('biofoocss', $url);
+        wp_register_style('biofoocss', $url."?".filemtime($path));
         wp_enqueue_style('biofoocss');
     }
 }
