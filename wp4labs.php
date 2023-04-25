@@ -764,6 +764,11 @@ function biofoo_box_inside($post) {
                 continue;
             }
 
+            // exclude test user
+            if ($user->user_login == 'Test') {
+                continue;
+            }
+
             $user = get_biofoo($user);
             if ($all_groups or ($user->group_css != 'passive')) {
                 $userZ[$i++ + 1000 * $user->group_ranking] = $user;
