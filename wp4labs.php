@@ -142,7 +142,7 @@ function biofoo_box_inside($post) {
         //var_dump($user);
         $ugroup = rawurldecode($user->biofoo_usergroup);
         //if ($css == 'boss') {$bosses[] = $member;} VERMUTLICH UNNÖTIG
-        $style = "display:inline-flex;justify-content:center;align-items:center;border-radius:50%;width:1rem;height:1rem;color:white;background:red;text-decoration:none";
+        $style = "display:inline-flex;justify-content:center;align-items:center;border-radius:50%;width:1rem;height:1rem;color:white;background:#b32d2e;text-decoration:none";
         echo "<li id='user_{$user->ID}'><span><a href='javascript:remove_user_from_project({$user->ID}, {$post->ID});' style='$style'>X</a></span> <a style='padding-left:4px; font-size:11px' href='user-edit.php?user_id={$user->ID}'>{$user->first_name} {$user->last_name} ($ugroup)</a></li>";
     }
     echo "</ul></p>";
@@ -416,32 +416,29 @@ function biofoo_box_inside($post) {
     function biofoo_main()
     { ?>
         <div class='wrap'>
-            <h2><?php echo _e('User Groups'); ?></h2>
+            <h2><?php _e('User Groups'); ?></h2>
             <form method='post' action='options.php'>
                 <?php settings_fields('biofoo_settings'); ?>
-                <label for='active_usergroups'><p><?php echo _e('Active Usergroups'); ?></label><br/>
+                <label for='active_usergroups'><p><?php _e('Active Usergroups'); ?></label><br/>
                 <textarea rows='9' id='active_usergroups'
                           name='active_usergroups'><?php echo get_option('active_usergroups', "P.I.\nPostdoc\nGraduate Student\nUndergraduate Student\nTechnician\nCollaborator\nSecretary"); ?></textarea>
 
-                <label for='passive_usergroups'><p><?php echo _e('Passive Usergroups'); ?></label><br/>
+                <label for='passive_usergroups'><p><?php _e('Passive Usergroups'); ?></label><br/>
                 <textarea rows='9' id='passive_usergroups'
                           name='passive_usergroups'><?php echo get_option('passive_usergroups', 'Alumni'); ?></textarea>
 
-                <p><?php echo _e("Enter one Name of a Usergroup each line. Note: The topmost name in the active user groups field represents always the principal investigator's group."); ?></p>
+                <p><?php _e("Enter one Name of a Usergroup each line. Note: The topmost name in the active user groups field represents always the principal investigator's group."); ?></p>
 
-                <h3><?php echo _e('Other Options'); ?></h3>
+                <h3><?php _e('Other Options'); ?></h3>
                 <?php $dont_use_ariw = (get_option('dont_use_ariw') != '') ? "checked='checked'" : ''; ?>
                 <input type='checkbox' id='dont_use_ariw' name='dont_use_ariw'
                        value='dont' <?php echo $dont_use_ariw; ?> /><label
-                        for='dont_use_ariw'><?php echo _e("Show the button to use the Ariw.org-database of worldwide scientific institution."); ?></label><br/>
-
+                        for='dont_use_ariw'><?php _e("Show the button to use the Ariw.org-database of worldwide scientific institution."); ?></label><br/>
 
                 <p class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/></p>
-
-
             </form>
         </div>
-        <p><?php echo _e("Provided by Biofoo-Plugin, written by Philipp Franck 2011"); ?></p>
+        <p><?php _e("Provided by Biofoo-Plugin, written by Philipp Franck 2011"); ?></p>
         <?php
     }
 
@@ -454,11 +451,10 @@ function biofoo_box_inside($post) {
         <script type="text/javascript">
             function remove_user_from_project(Suser_index, Spost_index) {
                 jQuery(document).ready(function ($) {
-                    var data = {
+                    const data = {
                         action: 'remove_user_from_project',
                         user_index: Suser_index,
                         post_index: Spost_index
-
                     };
                     jQuery.post(ajaxurl, data, function (response) {
                         if (response != '') {
@@ -470,7 +466,7 @@ function biofoo_box_inside($post) {
 
             function add_user_to_project(Spost_index) {
                 jQuery(document).ready(function ($) {
-                    var data = {
+                    const data = {
                         action: 'add_user_to_project',
                         user_index: document.getElementById('biofoo_userlist')[document.getElementById('biofoo_userlist').selectedIndex].value,
                         post_index: Spost_index
@@ -490,7 +486,7 @@ function biofoo_box_inside($post) {
                 //var myRequest = new ajaxObject(myurl + 'fetch_institution_data.php', spit_data);
                 //myRequest.update('countryslug=slux', 'POST');
                 jQuery(document).ready(function ($) {
-                    var data = {
+                    const data = {
                         action: 'fetch_countries',
                         countryslug: 'slux',
 
@@ -503,12 +499,12 @@ function biofoo_box_inside($post) {
 
             function fetch_inst() {
                 //var myurl = document.getElementById('myurl').value;
-                var Scountryslug = document.getElementById('countryslux')[document.getElementById('countryslux').selectedIndex].value;
+                const Scountryslug = document.getElementById('countryslux')[document.getElementById('countryslux').selectedIndex].value;
                 document.getElementById('output').innerHTML = '<span class="description">...fetching Data from ariw.org...</span>';
                 //var myRequest = new ajaxObject(myurl + 'fetch_institution_data.php', spit_data);
                 //myRequest.update('countryslug='+countryslug, 'POST');
                 jQuery(document).ready(function ($) {
-                    var data = {
+                    const data = {
                         action: 'fetch_inst',
                         countryslug: Scountryslug,
 
@@ -530,7 +526,7 @@ function biofoo_box_inside($post) {
                 //var myurl = document.getElementById('myurl').value;
                 document.getElementById('select_pic_output').innerHTML = '<span class="description">...connecting to media library...</span>';
                 jQuery(document).ready(function ($) {
-                    var data = {
+                    const data = {
                         action: 'select_picture',
                         oldpic: Sold_pic,
                         page: Spage,
@@ -690,7 +686,6 @@ function biofoo_box_inside($post) {
             if (!$user->boss_type) {
                 $allcaps['publish_posts'] = false;
             }
-
         }
 
         //echo $post_id;
