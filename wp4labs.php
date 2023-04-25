@@ -123,43 +123,44 @@ function biofoo_box($post)
 
 //getrennte funktion, damit die box per ajax als ganzes erneuert werden kann!
 function biofoo_box_inside($post) {
-?><p><strong><?php _e('Members'); ?></strong></p><?php
-$memberZ = get_post_meta($post->ID, 'member', false);
-if (!is_array($memberZ)) {
-    $memberZ = array($memberZ);
+    ?><p><strong><?php _e('Members'); ?></strong></p><?php
+    $memberZ = get_post_meta($post->ID, 'member', false);
+    if (!is_array($memberZ)) {
+        $memberZ = array($memberZ);
+    }
+    //<div ><span><a class="ntdelbutton" id="post_tag-check-num-0">X</a>&nbsp;dd</span></div>
+    echo "<ul id='memberlist' class='tagchecklist' style=\"margin-left:0\">";
+    $agroups = explode("\n", get_option('active_usergroups'));
+    foreach ($memberZ as $member) {
+        $user = get_userdata($member);
+        //remove eventually deleted user!
+        if (!$user->ID) {
+            delete_post_meta($post->ID, 'member', $member);
+            continue;
+        }
+
+        //var_dump($user);
+        $ugroup = rawurldecode($user->biofoo_usergroup);
+        //if ($css == 'boss') {$bosses[] = $member;} VERMUTLICH UNNÖTIG
+        $style = "display:inline-flex;justify-content:center;align-items:center;border-radius:50%;width:1rem;height:1rem;color:white;background:red;text-decoration:none";
+        echo "<li id='user_{$user->ID}'><span><a href='javascript:remove_user_from_project({$user->ID}, {$post->ID});' style='$style'>X</a></span> <a style='padding-left:4px; font-size:11px' href='user-edit.php?user_id={$user->ID}'>{$user->first_name} {$user->last_name} ($ugroup)</a></li>";
+    }
+    echo "</ul></p>";
+
+    $users = get_users(array('orderby' => 'last_name', 'order' => 'ASC', 'exclude' => $memberZ, 'fields' => 'ID'));
+    if (count($users) > 0) {
+        ?><label for="biofoo_add_member" style="margin-block:1em;display:block;"><strong><?php _e('Add Member'); ?></strong></label>
+        <div style="display:flex"><select id='biofoo_userlist' id='biofoo_add_member' size='1'><?php
+
+        foreach ($users as $auser) {
+            $user = get_userdata($auser);
+            echo "<option id='user2_{$user->ID}' value='{$user->ID}' name='user2_{$user->ID}'>{$user->first_name} {$user->last_name}</option>";
+        }
+        echo "</select><input type='button' value='Add' class='button' onclick='add_user_to_project({$post->ID})'></div>";
+        //var_dump($users);
+    }
+
 }
-//<div ><span><a class="ntdelbutton" id="post_tag-check-num-0">X</a>&nbsp;dd</span></div>
-echo "<ul id='memberlist' class='tagchecklist'>";
-$agroups = explode("\n", get_option('active_usergroups'));
-foreach ($memberZ as $member) {
-    $user = get_userdata($member);
-    //remove eventually deleted user!
-    if (!$user->ID) {
-        delete_post_meta($post->ID, 'member', $member);
-        continue;
-    }
-
-    //var_dump($user);
-    $ugroup = rawurldecode($user->biofoo_usergroup);
-    //if ($css == 'boss') {$bosses[] = $member;} VERMUTLICH UNNÖTIG
-    echo "<li id='user_{$user->ID}'><span><a class='ntdelbutton' href='javascript:remove_user_from_project({$user->ID}, {$post->ID});'>X</a></span> <a style='padding-left:4px; font-size:11px' href='user-edit.php?user_id={$user->ID}'>{$user->first_name} {$user->last_name} ($ugroup)</a></li>";
-}
-echo "</ul></p>";
-
-$users = get_users(array('orderby' => 'last_name', 'order' => 'ASC', 'exclude' => $memberZ, 'fields' => 'ID'));
-if (count($users) > 0) {
-?><p><strong><?php _e('Add Member'); ?></strong></p>
-<ul id='biofoo_userlist' id='biofoo_add_member' size='1'><?php
-
-    foreach ($users as $auser) {
-        $user = get_userdata($auser);
-        echo "<option id='user2_{$user->ID}' value='{$user->ID}' name='user2_{$user->ID}'>{$user->first_name} {$user->last_name}</option>";
-    }
-    echo "</select><input type='button' value='Add' class='button' onclick='add_user_to_project({$post->ID})'>";
-    //var_dump($users);
-    }
-
-    }
 
     /*function biofoo_box2($post) { // template chooser  FUNCTION REMOVED
     /*	wp_nonce_field( plugin_basename(__FILE__), 'biofoo_nonce' );
@@ -802,11 +803,11 @@ if (count($users) > 0) {
                     echo "<div class='staff-card__info'><h3 class='username'>{$user->first_name} {$user->last_name}</h3>";
                     echo "<p class='usergroup'>{$user->group}</p>";
 
-                    $email = "<span class='m-address'>".str_replace("{at}", "</span>", $user->nice_email);
+                    $email = "<span class='m-address'>" . str_replace("{at}", "</span>", $user->nice_email);
                     echo "<p class='user-info'>Email: $email</p></div>";
 
                     if (($user->ba_degree or $user->ma_degree) or $user->phd_degree) {
-                        echo "<div class='academic-degrees'><h4>",__('Academic Degrees'),"</h4><table class='user_info'>";
+                        echo "<div class='academic-degrees'><h4>", __('Academic Degrees'), "</h4><table class='user_info'>";
                         if ($user->ba_degree) {
                             echo "<tr><td>B.A.</td><td>{$user->ba_degree}</td></tr>";
                         }
