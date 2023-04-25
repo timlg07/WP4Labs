@@ -31,6 +31,7 @@ add_action('wp_print_styles', 'add_biofoocss');
 add_filter('user_has_cap', 'give_permissions', 0, 3); // die permissions manipulieren setzen für die projekte
 add_filter('get_avatar', 'get_pafs_avatar', 100, 3); // verbesserten avatar auswerfen
 //add_filter('single_template', 'biofoo_optional_template'); // FUNKTION REMOVED fügt optionale page templates für biofoo_projects ein
+add_filter( 'authenticate', 'authentication_filter', PHP_INT_MAX, 3); // inaktive user können sich nicht mehr einloggen
 
 // ajax-spezifische actions
 add_action('admin_head', 'all_ajax_functions');
@@ -690,6 +691,23 @@ function biofoo_box_inside($post) {
 
         //echo $post_id;
         return $allcaps;
+    }
+
+    /**
+     * Prohibits inactive users from logging in
+     *
+     * @param $user
+     * @param $username
+     * @param $password
+     * @return mixed|WP_Error
+     */
+    function authentication_filter($user, $username, $password)
+    {
+        $userdata = get_biofoo($user);
+        if (!$userdata->active_group) {
+            return new WP_Error('authentication_failed', __('Your account is inactive. Please contact the administrator to regain access.'));
+        }
+        return $user;
     }
 
 
