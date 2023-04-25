@@ -117,25 +117,60 @@ input.select0r_pic {
 }
 
 /* longlist */
-
-.staff_longlist .longlist_avatar {
-	float: left;
-	margin-right: 6px;
-	
+.staff-longlist .staff-card {
+	margin-block: 1rem;
+}
+.staff-longlist .staff-card a {
+	display: grid;
+	grid-template-columns: 100px 1fr;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	align-items: center;
+	gap: 1rem;
+	color: inherit;
+	border: 0;
+	background: #A0AA9577;
+	outline: 2px solid transparent;
+	transition: outline-color 0.2s ease-in-out, background 0.2s ease-in-out;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.staff-longlist .staff-card.passive a {
+	background: #8C948C77;
+}
+.staff-longlist .staff-card a:hover {
+	background: #C0CCB5aa;
+	outline-color: #C4B550;
+}
+.staff-longlist .staff-card.passive a:hover {
+	background: #B8BEB2AA;
+	outline-color: #dacc7a;
+}
+.staff-longlist .staff-card a img {
+	width: 100px;
+	height: 100% !important;
+	object-fit: cover;
+	object-position: center;
+}
+.staff-longlist .staff-card a .staff-card__info {
+}
+.staff-longlist .staff-card a .staff-card__info p {
+	margin-inline: 0;
+}
+.staff-longlist .staff-card a .staff-card__info .user-info {
+	font-size: 10px;
+}
+.staff-longlist .staff-card a .staff-card__info .user-info .m-address::after {
+	content: '@';
+}
+.staff-longlist .staff-card a .academic-degrees td {
+	color: inherit;
+}
+.staff-longlist .staff-card a :is(h3,h4,p,table) {
+	margin-block: .5rem !important;
 }
 
-.staff_longlist .active, .staff_longlist .passive, .staff_longlist .boss {
-	min-height: 100px;
-	
-}
-
-.staff_longlist p, .staff_longlist h2, .staff_longlist h3, .staff_longlist h4, .staff_longlist table {
-	margin-left: 106px;
-}
-	
-
-
-/* user page / long list */
+	/* user page / long list */
 
 table.user_info, table.user_info td {
 	border: none;

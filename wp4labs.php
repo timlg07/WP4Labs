@@ -717,8 +717,8 @@ if (count($users) > 0) {
         $user->boss_group = ($user->group == $agroups[0]);
         $user->group_css = ($user->active_group) ? ($user->boss_group) ? 'boss' : 'active' : 'passive';
         $user->group_ranking = array_search($user->group, $agroups);
-        if ($user->group_ranking === false) {
-            $user->group_ranking = 1000;
+        if ($user->group_ranking === false || isset($user->biofoo_isActive) && !$user->biofoo_isActive) {
+            $user->group_ranking += 1000;
         }
 
         //other fields
@@ -736,7 +736,7 @@ if (count($users) > 0) {
         return $user;
     }
 
-    function echo_project_members($post_id, $style = 'boxes', $allgroups = true)
+    function echo_project_members($post_id, $style = 'boxes', $all_groups = true)
     {
         if ($post_id == 'all') {
             $memberZ = get_users();
@@ -769,7 +769,7 @@ if (count($users) > 0) {
             }
 
             $user = get_biofoo($user);
-            if ($allgroups or ($user->group_css != 'passive')) {
+            if ($all_groups or ($user->group_css != 'passive')) {
                 $userZ[$i++ + 1000 * $user->group_ranking] = $user;
             }
         }
@@ -783,23 +783,30 @@ if (count($users) > 0) {
                     echo "<div class='username'>{$user->first_name} {$user->last_name}<div class='usergroup'> ({$user->group})</div></div></a></div></span>\n";
                 }
                 echo "</div>\n<div class='floatkiller'></div>";
-
                 break;
 
             case 'return';
                 return $memberZ;
-                break;
 
             case 'longlist': /*longlist is long! */
-                echo "<div class='staff_longlist'>\n";
-                $passiveones = false;
-                foreach ($userZ as $kid => $user) {
-                    echo "<div class='{$user->group_css}'><a href='{$user->guid}'><div class='longlist_avatar'>", get_avatar($user->ID);
-                    echo "</div><h2 class='username'>{$user->first_name} {$user->last_name}</h2></a>";
+                echo "<div class='staff-longlist'>\n";
+                echo "<h2 class='headline'>Current Members</h2>\n";
+                $former_members_header_shown = false;
+                foreach ($userZ as $user) {
+                    if ($user->group_ranking >= 1000 && !$former_members_header_shown) {
+                        $former_members_header_shown = true;
+                        echo "<div style='margin-top: 50px'><h2 class='headline'>Former Members</h2></div>";
+                    }
 
+                    echo "<div class='staff-card {$user->group_css}'><a href='{$user->guid}'>", get_avatar($user->ID);
+                    echo "<div class='staff-card__info'><h3 class='username'>{$user->first_name} {$user->last_name}</h3>";
                     echo "<p class='usergroup'>{$user->group}</p>";
+
+                    $email = "<span class='m-address'>".str_replace("{at}", "</span>", $user->nice_email);
+                    echo "<p class='user-info'>Email: $email</p></div>";
+
                     if (($user->ba_degree or $user->ma_degree) or $user->phd_degree) {
-                        echo "<h4>", _e('Academic Degrees'), "</h4><table class='user_info'>";
+                        echo "<div class='academic-degrees'><h4>",__('Academic Degrees'),"</h4><table class='user_info'>";
                         if ($user->ba_degree) {
                             echo "<tr><td>B.A.</td><td>{$user->ba_degree}</td></tr>";
                         }
@@ -809,14 +816,9 @@ if (count($users) > 0) {
                         if ($user->phd_degree) {
                             echo "<tr><td>Ph.D.</td><td>{$user->phd_degree}</td></tr>";
                         }
-                        echo "</table>";
+                        echo "</table></div>";
                     }
-                    echo "<table class='user_info'><tr><td>Email:</td><td>{$user->nice_email}</td></tr></table>";
-                    echo "</div>\n";
-                    if (($user->group_ranking >= 1000) and (!$passiveones)) {
-                        $passiveones = true;
-                        echo "<div style='margin-top: 50px'><h3>Former Members</h3></div>";
-                    }
+                    echo "</a></div>\n";
                 }
                 echo "</div>";
                 break;
@@ -828,6 +830,7 @@ if (count($users) > 0) {
                 break;
         }
 
+        return null;
     }
 
     function the_boss($post_id)
