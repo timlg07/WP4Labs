@@ -138,11 +138,11 @@ input.select0r_pic {
 .staff-longlist .staff-card.passive a {
 	background: #8C948C77;
 }
-.staff-longlist .staff-card a:hover {
+.staff-longlist .staff-card a:is(:hover, :focus, :active) {
 	background: #C0CCB5aa;
 	outline-color: #C4B550;
 }
-.staff-longlist .staff-card.passive a:hover {
+.staff-longlist .staff-card.passive a:is(:hover, :focus, :active) {
 	background: #B8BEB2AA;
 	outline-color: #dacc7a;
 }
