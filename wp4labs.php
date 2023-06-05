@@ -600,7 +600,7 @@ function biofoo_box_inside($post) {
         } elseif ($show == 1) {
             echo "<div class='select0r_pic' onclick='select_picture(2, $picid, 0, $user_id)'>", wp_get_attachment_image($picid), "</div>";
         } elseif ($show == 2) {
-            $media = get_posts(array('post_type' => 'attachment', 'numberposts' => $pix_per_page, 'orderby' => 'title', 'offset' => $page, 'order' => 'ASC'));
+            $media = get_posts(array('post_type' => 'attachment', 'numberposts' => $pix_per_page, 'orderby' => 'date', 'offset' => $page, 'order' => 'DESC'));
             if ($page > 0) {//zurück button
                 $tpage = $page - $pix_per_page;
                 echo "<input type='button' class='select0r_pic arrow-btn' id='pic_select0r_back' onclick='select_picture(2, $picid, $tpage, $user_id)' value='◀' />";
