@@ -231,7 +231,7 @@ function biofoo_box_inside($post) {
                     <div id='select_pic_output'>
                         <?php echo_picture_selector(($user->biofoo_picture) ? 1 : 0, $user->biofoo_picture, 0, $user->ID); ?>
                     </div>
-                    <span class="description"><?php _e("Click on the picture, to change your local avatar. You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead you may go to <a target='_blank' href='http://gravatar.com'>gravatar.com</a> an set up a global Avatar."); ?></span>
+                    <span class="description"><?php _e("Click on the picture to change your local avatar. <br>You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead, you may go to <a target='_blank' href='http://gravatar.com'>gravatar.com</a> an set up a global Avatar."); ?></span>
                 </td>
             </tr>
             <tr>
@@ -246,7 +246,7 @@ function biofoo_box_inside($post) {
                 <td>
                     <input type="text" name="blog_rss" id="blog_rss" value="<?php echo $user->blog_rss; ?>"
                            class="regular-text"/>
-                    <span class="description"><?php _e("You may a blog-adress additional to your Homepage"); ?></span>
+                    <span class="description"><?php _e("You may add a blog-address additional to your Homepage"); ?></span>
                 </td>
             </tr>
             <tr>
@@ -258,8 +258,7 @@ function biofoo_box_inside($post) {
                         <a href="javascript:fetch_countries()">Select from ariw.org - Database</a>
                         <br/>
                     <?php endif; ?>
-                    <?php //(auto-filling) text-fields
-                    ?>
+                    <?php //(auto-filling) text-fields ?>
                     <input type="text" name="inst_name" id="inst_name" value="<?php echo $user->inst_name; ?>"
                            class="regular-text"/>
                     <span class="description"><?php _e("Institution Name"); ?></span><br/>
@@ -525,7 +524,8 @@ function biofoo_box_inside($post) {
             //picture selector
             function select_picture(Show, Sold_pic, Spage, Suser_id) {
                 //var myurl = document.getElementById('myurl').value;
-                document.getElementById('select_pic_output').innerHTML = '<span class="description">...connecting to media library...</span>';
+                document.getElementById('select_pic_output').innerHTML = '<span class="description">connecting to media library &hellip;</span>';
+                const info = Show === -1 ? '<strong>Picture removed. Save the profile to see the changes.</strong>' : '';
                 jQuery(document).ready(function ($) {
                     const data = {
                         action: 'select_picture',
@@ -533,10 +533,9 @@ function biofoo_box_inside($post) {
                         page: Spage,
                         show: Show,
                         user_id: Suser_id
-
                     };
                     jQuery.post(ajaxurl, data, function (response) {
-                        document.getElementById('select_pic_output').innerHTML = response;
+                        document.getElementById('select_pic_output').innerHTML = response + info;
                     });
                 });
             }
@@ -589,7 +588,7 @@ function biofoo_box_inside($post) {
         //echo "$show , $picid, $page";
 
         $pix_per_page = 10;
-        echo "<div id='pic_select0r' class='regular-text'>";
+        echo "<div id='pic_select0r'>";
 
         if ($show == -1) {
             $show = 0;
@@ -597,14 +596,14 @@ function biofoo_box_inside($post) {
         }//just avatar extension
 
         if ($show == 0) {
-            echo "<div class='select0r_pic' onclick='select_picture(2, 0, 0, $user_id)'>" . get_avatar($user_id, 64, '', "gravatar.com\nnot reachable") . "</div>";
+            echo "<div class='select0r_pic' onclick='select_picture(2, 0, 0, $user_id)'>" . get_avatar($user_id, 96, '', "gravatar.com\nnot reachable") . "</div>";
         } elseif ($show == 1) {
-            echo "<div class='select0r_pic' onclick='select_picture(2, $picid, 0, $user_id)'>", wp_get_attachment_image($picid, array(64, 64)), "</div>";
+            echo "<div class='select0r_pic' onclick='select_picture(2, $picid, 0, $user_id)'>", wp_get_attachment_image($picid), "</div>";
         } elseif ($show == 2) {
             $media = get_posts(array('post_type' => 'attachment', 'numberposts' => $pix_per_page, 'orderby' => 'title', 'offset' => $page, 'order' => 'ASC'));
             if ($page > 0) {//zurück button
                 $tpage = $page - $pix_per_page;
-                echo "<input type='button' class='select0r_pic' id='pic_select0r_back' onclick='select_picture(2, $picid, $tpage, $user_id)' value='back' />";
+                echo "<input type='button' class='select0r_pic arrow-btn' id='pic_select0r_back' onclick='select_picture(2, $picid, $tpage, $user_id)' value='◀' />";
             }
 
             foreach ($media as $medium) {
@@ -612,18 +611,19 @@ function biofoo_box_inside($post) {
                 $mime = $mime[0];
                 if ($mime == 'image') {
                     $selected = ($medium->ID == $picid) ? "select0red_pic" : '';
-                    echo "<div onclick='select_picture(1, {$medium->ID}, $page, $user_id) 'class='select0r_pic $selected'>", wp_get_attachment_image($medium->ID, array(64, 64)), "<span class='hoverfoo'>", $medium->post_title, "</span></div>";
+                    echo "<div onclick='select_picture(1, {$medium->ID}, $page, $user_id) ' class='select0r_pic $selected'>", wp_get_attachment_image($medium->ID), "<span class='hoverfoo'>", $medium->post_title, "</span></div>";
                 }
             }
             if (count($media) >= $pix_per_page) {//weiter button
                 $tpage = $page + $pix_per_page;
-                echo "<input type='button' class='select0r_pic' id='pic_select0r_next' onclick='select_picture(2, $picid, $tpage, $user_id)' value='continue' />";
+                echo "<input type='button' class='select0r_pic arrow-btn' id='pic_select0r_next' onclick='select_picture(2, $picid, $tpage, $user_id)' value='▶' />";
             }
             //no pic button
-            echo "<input type='button' class='select0r_pic' onclick='select_picture(-1, 0, 0, $user_id)' value='Use\nDefault/\nGlobal\nAvatar' />";
+            echo "</div>
+            <input type='button' class='default-pic-btn button' onclick='select_picture(-1, 0, 0, $user_id)' value='Use\nDefault/\nGlobal\nAvatar' />";
 
         }
-        echo "</div><input type='hidden' id='biofoo_picture' name='biofoo_picture' value='$picid' /><br style='clear:both' />";
+        echo "<input type='hidden' id='biofoo_picture' name='biofoo_picture' value='$picid' /><br style='clear:both' />";
     }
 
     function select_picure_response()
