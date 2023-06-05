@@ -812,7 +812,7 @@ function biofoo_box_inside($post) {
                 echo "<h2 class='headline'>Current Members</h2>\n";
                 $former_members_header_shown = false;
                 foreach ($userZ as $user) {
-                    if ($user->group_ranking >= 1000 && !$former_members_header_shown) {
+                    if ($user->group_css == 'passive' && !$former_members_header_shown) {
                         $former_members_header_shown = true;
                         echo "<div style='margin-top: 50px'><h2 class='headline'>Former Members</h2></div>";
                     }
