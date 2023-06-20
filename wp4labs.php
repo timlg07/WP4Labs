@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP4Labs
-Plugin URI: http://wordpress.org/extend/plugins/wp4labs/
+Plugin URI: https://wordpress.org/extend/plugins/wp4labs/
 Description: Adds some lightweight features to manage scientific groups and users.
 Version: 1.6
 Author: Philipp Franck
@@ -231,7 +231,7 @@ function biofoo_box_inside($post) {
                     <div id='select_pic_output'>
                         <?php echo_picture_selector(($user->biofoo_picture) ? 1 : 0, $user->biofoo_picture, 0, $user->ID); ?>
                     </div>
-                    <span class="description"><?php _e("Click on the picture to change your local avatar. <br>You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead, you may go to <a target='_blank' href='http://gravatar.com'>gravatar.com</a> an set up a global Avatar."); ?></span>
+                    <span class="description"><?php _e("Click on the picture to change your local avatar. <br>You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead, you may go to <a target='_blank' href='https://gravatar.com'>gravatar.com</a> an set up a global Avatar."); ?></span>
                 </td>
             </tr>
             <tr>
