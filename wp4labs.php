@@ -231,7 +231,7 @@ function biofoo_box_inside($post) {
                     <div id='select_pic_output'>
                         <?php echo_picture_selector(($user->biofoo_picture) ? 1 : 0, $user->biofoo_picture, 0, $user->ID); ?>
                     </div>
-                    <span class="description"><?php _e("Click on the picture to change your local avatar. <br>You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead, you may go to <a target='_blank' href='https://gravatar.com'>gravatar.com</a> an set up a global Avatar."); ?></span>
+                    <span class="description"><?php _e("Click on the picture to change your local avatar. <br>You can <a  target='_blank' href='media-new.php'>upload</a> your own picture using the media library for it. Instead, you may go to <a target='_blank' href='https://gravatar.com'>gravatar.com</a> and set up a global Avatar."); ?></span>
                 </td>
             </tr>
             <tr>
@@ -664,11 +664,15 @@ function biofoo_box_inside($post) {
 
     function give_permissions($allcaps, $cap, $args)
     {
+        if (!isset($args[2])) {
+            return $allcaps;
+        }
+
         $user_id = $args[1];
         $post_id = $args[2];
 
         $post = get_post($post_id);
-        if (($post_id) and ($post->post_type = 'biofoo_project')) {        //in_array('edit_projects', $cap)
+        if ($post && $post->post_type == 'biofoo_project') {        //in_array('edit_projects', $cap)
             $user = get_userdata($user_id);
 
             $members = get_post_meta($post_id, 'member', false);
